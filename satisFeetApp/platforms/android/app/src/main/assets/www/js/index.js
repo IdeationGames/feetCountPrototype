@@ -16,6 +16,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+var successHandler = function (pedometerData) {
+        this.receivedEvent('newStepData',pedometerData.numberOfSteps);
+        // pedometerData.startDate; -> ms since 1970
+        // pedometerData.endDate; -> ms since 1970
+        //pedometerData.distance;
+        // pedometerData.floorsAscended;
+        // pedometerData.floorsDescended;
+};
+var onError = function(){
+    console.log("error");
+}
 var app = {
     // Application Constructor
     initialize: function() {
@@ -27,18 +38,21 @@ var app = {
     // Bind any cordova events here. Common events are:
     // 'pause', 'resume', etc.
     onDeviceReady: function() {
-        this.receivedEvent('deviceready');
+        //this.receivedEvent('deviceready');
+       /* setInterval(*/pedometer.startPedometerUpdates(successHandler.bind(this), onError)/*, 500)*/;
     },
 
     // Update DOM on a Received Event
-    receivedEvent: function(id) {
+    receivedEvent: function(id,stepCount) {
         var parentElement = document.getElementById(id);
-        var listeningElement = parentElement.querySelector('.listening');
-        var receivedElement = parentElement.querySelector('.received');
-
-        listeningElement.setAttribute('style', 'display:none;');
-        receivedElement.setAttribute('style', 'display:block;');
-
+        //var listeningElement = parentElement.querySelector('.listening');
+        //var receivedElement = parentElement.querySelector('.received');
+        var stepUpdateElement = parentElement.querySelector('.stepUpdate');
+        //var distanceUpdateElement = parentElement.querySelector('.distanceUpdate');
+        //listeningElement.setAttribute('style', 'display:none;');
+        //receivedElement.setAttribute('style', 'display:block;');
+        stepUpdateElement.innerHTML = stepCount;
+        //distanceUpdateElement.innerHTML = distance;
         console.log('Received Event: ' + id);
     }
 };
