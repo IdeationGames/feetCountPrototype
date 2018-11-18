@@ -16,38 +16,95 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-var lastGeoUpdateTime = 0;
+var isDebugging = false;     //change this to cancel all the consolelogs except for errors
+//var lastGeoUpdateTime = 0;
 var counterGeoUpdates = 0;
+var lastGeoLocation ={lon:0,lat:0};
+var traveledDistance = 0; //it initialises with 5m on the count allready
+var stepCount = 0;
+var stepCountInOneMinute = 0;
+var stepCountAtTheStartOfTheMinute = 0;
+var stepCountInOneMinuteTimer = Date.now();
+var stepCountInLastMinuteGreaterThanFifty = false;
+var calculateViaSteps = true;
+var accuracyThreshold = 5;
+var appStartTime = Date.now();
+//traveled distance sollte auch hier angezeigt werden 
 var successHandlerPedometer = function (pedometerData) {
-        this.receivedEvent('newStepData',pedometerData.numberOfSteps);
-        if(Date.now()-lastGeoUpdateTime >10000 && lastGeoUpdateTime != 0){
+        if(calculateViaSteps){
+            var distance = 0;
+            distance = (pedometerData.numberOfSteps-stepCount)*0.77;
+            traveledDistance += distance;
+            this.receivedEvent('newDistance',traveledDistance);
+            this.receivedEvent('newAverageSpeed',(traveledDistance/((Date.now()-appStartTime)/1000))*3600/1000);
+        }
+        stepCount = pedometerData.numberOfSteps;
+        stepCountInOneMinute = stepCount - stepCountAtTheStartOfTheMinute;
+        let timestamp = Date.now();
+        if(timestamp-stepCountInOneMinuteTimer>60000){
+            stepCountInLastMinuteGreaterThanFifty=stepCountInOneMinute>50?true:false;
+            stepCountInOneMinuteTimer = timestamp;
+            stepCountInOneMinute = 0;
+            stepCountAtTheStartOfTheMinute = stepCount;
+        }
+        this.receivedEvent('newStepData',stepCount);
+        /*if(Date.now()-lastGeoUpdateTime >10000 && lastGeoUpdateTime != 0){
             lastGeoUpdateTime = 0;
             navigator.geolocation.getCurrentPosition(successHandlerGeoLocation.bind(this), onErrorGeoLocation,{enableHighAccuracy: true});
-        }
+        }*/
         // pedometerData.startDate; -> ms since 1970
         // pedometerData.endDate; -> ms since 1970
         //pedometerData.distance;
         // pedometerData.floorsAscended;counterGeoUpdates++;
         // pedometerData.floorsDescended;
 };
+
 var onErrorPedometer = function(error){
     console.log(error);
 }
 
 var successHandlerGeoLocation = function(position) {
-    counterGeoUpdates++;
-    this.receivedEvent('newGeoLocation','Latitude: '          + position.coords.latitude          + '\n' +
-          'Longitude: '         + position.coords.longitude         + '\n' +
-          'Altitude: '          + position.coords.altitude          + '\n' +
-          'Accuracy: '          + position.coords.accuracy          + '\n' +
-          'Altitude Accuracy: ' + position.coords.altitudeAccuracy  + '\n' +
-          'Heading: '           + position.coords.heading           + '\n' +
-          'Speed: '             + position.coords.speed             + '\n' +
-          'Timestamp: '         + position.timestamp                + '\n' +
-          'TimeBetweenUpdates: '+ (position.timestamp-lastGeoUpdateTime)               + '\n' +
-          'counter updates: '   +  counterGeoUpdates                + '\n');
-    lastGeoUpdateTime = position.timestamp;
-    console.log(position.timestamp+" "+counterGeoUpdates);
+    //The user has to do at least 50 steps in a minute, if he won't move we don't need the geoLocation
+    if(Date.now()-stepCountInOneMinuteTimer<60000 &&
+        (stepCountInLastMinuteGreaterThanFifty || stepCountInOneMinute > 50)&&
+        position.coords.accuracy<accuracyThreshold)
+    {
+        calculateViaSteps = false;
+        if(counterGeoUpdates == 0){alert("now using GPS")};
+        counterGeoUpdates++;
+        var distanceSinceLastCall = 0;
+        if(counterGeoUpdates%5==0){
+            distanceSinceLastCall = getDistanceFromLatLonInM(lastGeoLocation.lat,
+                lastGeoLocation.lon,
+                position.coords.latitude,
+                position.coords.longitude);
+            traveledDistance += distanceSinceLastCall>42?0:distanceSinceLastCall;
+        }
+        this.receivedEvent('newDistance',traveledDistance);
+        this.receivedEvent('newAverageSpeed',traveledDistance/((Date.now()-appStartTime)/1000));
+        this.receivedEvent('newCurrentSpeed',position.coords.speed);
+        /*this.receivedEvent('newGeoLocation',
+              //'Latitude: '          + position.coords.latitude          + '\n' +
+              //'Longitude: '         + position.coords.longitude         + '\n' +
+              //'Distance: '            + distanceSinceLastCall             + '\n' +
+              //'TraveledDistance: '    + traveledDistance                 + '\n' +
+              'Altitude: '          + position.coords.altitude          + '\n' +
+              'Accuracy: '          + position.coords.accuracy          + '\n' +
+              //'Altitude Accuracy: ' + position.coords.altitudeAccuracy  + '\n' +
+              //'Heading: '           + position.coords.heading           + '\n' +
+              //'Speed: '             + position.coords.speed             + '\n' +//meter per second
+              //'Timestamp: '         + position.timestamp                + '\n' +
+              //'TimeBetweenUpdates: '+ (position.timestamp-lastGeoUpdateTime)               + '\n' +
+              //'counter updates: '   +  counterGeoUpdates                + '\n');*/
+        //lastGeoUpdateTime = position.timestamp;
+        if(distanceSinceLastCall > 0){
+            lastGeoLocation.lon = position.coords.longitude;
+            lastGeoLocation.lat = position.coords.latitude;
+        }
+        if(isDebugging){console.log(position.timestamp+" "+counterGeoUpdates)};
+    }else{
+        calculateViaSteps = true;
+    }
 };
 
 // onError Callback receives a PositionError object
@@ -79,12 +136,21 @@ var app = {
             case "newStepData":
                 updateElement = parentElement.querySelector('.stepUpdate');
             break;
-            case "newGeoLocation":
-                updateElement = parentElement.querySelector('.geoLocationUpdate');
+            /*case "newGeoLocation":
+                updateElement = parentElement.querySelector('.geoLocationUpdate');*/
+            break;
+            case "newDistance":
+                updateElement = parentElement.querySelector('.distanceUpdate');
+            break;
+            case "newAverageSpeed":
+                updateElement = parentElement.querySelector('.averageSpeedUpdate');
+            break;
+            case "newCurrentSpeed":
+                updateElement = parentElement.querySelector('.currentSpeedUpdate');
             break;
         }
         updateElement.innerHTML = data;
-        console.log('Received Event: ' + id);
+        if(isDebugging){console.log('Received Event: ' + id)};
     }
 };
 
