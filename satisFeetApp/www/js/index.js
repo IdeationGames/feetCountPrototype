@@ -27,16 +27,32 @@ var stepCountAtTheStartOfTheMinute = 0;
 var stepCountInOneMinuteTimer = Date.now();
 var stepCountInLastMinuteGreaterThanFifty = false;
 var calculateViaSteps = true;
-var accuracyThreshold = 5;
-var appStartTime = Date.now();
+var accuracyThreshold = 8;
+var appStartTime;
+var watchId;
+var trainingStepCountAtTheStart = 0;
+var trainingStartDistance = 0;
+var isTrainingStarted = false;
+
+var successStopPedo = function(){
+    console.log("stoped Pedometer");
+}
+var failurStopPedo = function(){
+    console.log("couldn't stop Pedometer");
+}
 //traveled distance sollte auch hier angezeigt werden 
 var successHandlerPedometer = function (pedometerData) {
         if(calculateViaSteps){
             var distance = 0;
             distance = (pedometerData.numberOfSteps-stepCount)*0.77;
             traveledDistance += distance;
+            if(isTrainingStarted){
+                trainingStartDistance = trainingStartDistance>0?trainingStartDistance:traveledDistance;
+                let trainingDistance = traveledDistance - trainingStartDistance;
+                this.receivedEvent('newAverageSpeed',(trainingDistance/((Date.now()-appStartTime)/1000))*3600/1000);
+                this.receivedEvent('newTrainingDistance',trainingDistance);
+            }
             this.receivedEvent('newDistance',traveledDistance);
-            this.receivedEvent('newAverageSpeed',(traveledDistance/((Date.now()-appStartTime)/1000))*3600/1000);
         }
         stepCount = pedometerData.numberOfSteps;
         stepCountInOneMinute = stepCount - stepCountAtTheStartOfTheMinute;
@@ -48,6 +64,10 @@ var successHandlerPedometer = function (pedometerData) {
             stepCountAtTheStartOfTheMinute = stepCount;
         }
         this.receivedEvent('newStepData',stepCount);
+        if(isTrainingStarted){
+            trainingStepCountAtTheStart = (trainingStepCountAtTheStart>0)?trainingStepCountAtTheStart:pedometerData.numberOfSteps;
+            this.receivedEvent('newTrainingStepData',(stepCount - trainingStepCountAtTheStart));
+        }
         /*if(Date.now()-lastGeoUpdateTime >10000 && lastGeoUpdateTime != 0){
             lastGeoUpdateTime = 0;
             navigator.geolocation.getCurrentPosition(successHandlerGeoLocation.bind(this), onErrorGeoLocation,{enableHighAccuracy: true});
@@ -64,6 +84,7 @@ var onErrorPedometer = function(error){
 }
 
 var successHandlerGeoLocation = function(position) {
+    if(isDebugging){console.log(position.coords.accuracy)};
     //The user has to do at least 50 steps in a minute, if he won't move we don't need the geoLocation
     if(Date.now()-stepCountInOneMinuteTimer<60000 &&
         (stepCountInLastMinuteGreaterThanFifty || stepCountInOneMinute > 50)&&
@@ -81,8 +102,13 @@ var successHandlerGeoLocation = function(position) {
             traveledDistance += distanceSinceLastCall>42?0:distanceSinceLastCall;
         }
         this.receivedEvent('newDistance',traveledDistance);
-        this.receivedEvent('newAverageSpeed',traveledDistance/((Date.now()-appStartTime)/1000));
-        this.receivedEvent('newCurrentSpeed',position.coords.speed);
+        if(isTrainingStarted){
+            trainingStartDistance = trainingStartDistance>0?trainingStartDistance:traveledDistance;
+            let trainingDistance = traveledDistance - trainingStartDistance;
+            this.receivedEvent('newAverageSpeed',(trainingDistance/((Date.now()-appStartTime)/1000))*3600/1000);
+            this.receivedEvent('newTrainingDistance',trainingDistance);
+            this.receivedEvent('newCurrentSpeed',position.coords.speed);
+        }
         /*this.receivedEvent('newGeoLocation',
               //'Latitude: '          + position.coords.latitude          + '\n' +
               //'Longitude: '         + position.coords.longitude         + '\n' +
@@ -116,6 +142,7 @@ function onErrorGeoLocation(error) {
 var app = {
     // Application Consftructor
     initialize: function() {
+        document.getElementById("start-button").addEventListener("click",startTracking.bind(this));
         document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
     },
 
@@ -125,7 +152,6 @@ var app = {
     // 'pause', 'resume', etc.
     onDeviceReady: function() {
         pedometer.startPedometerUpdates(successHandlerPedometer.bind(this), onErrorPedometer);
-        var watchId = navigator.geolocation.watchPosition(successHandlerGeoLocation.bind(this), onErrorGeoLocation,{enableHighAccuracy: true, timeout:30000});
     },
 
     // Update DOM on a Received Event
@@ -136,8 +162,14 @@ var app = {
             case "newStepData":
                 updateElement = parentElement.querySelector('.stepUpdate');
             break;
+            case "newTrainingStepData":
+                updateElement = parentElement.querySelector('.stepTrainingUpdate');
+            break;
             /*case "newGeoLocation":
                 updateElement = parentElement.querySelector('.geoLocationUpdate');*/
+            break;
+            case "newTrainingDistance":
+                updateElement = parentElement.querySelector('.trainingDistanceUpdate');
             break;
             case "newDistance":
                 updateElement = parentElement.querySelector('.distanceUpdate');
@@ -153,5 +185,24 @@ var app = {
         if(isDebugging){console.log('Received Event: ' + id)};
     }
 };
+
+function stopTracking(){
+    isTrainingStarted = false;
+    trainingStepCountAtTheStart = 0;
+    trainingStartDistance = 0;
+    navigator.geolocation.clearWatch(watchId);
+    //pedometer.stopPedometerUpdates(successStopPedo, failurStopPedo);
+    startButton.removeEventListener("click",stopTracking);
+    startButton.addEventListener("click",startTracking);
+}
+
+function startTracking(){
+    appStartTime = Date.now();
+    isTrainingStarted = true;
+    watchId = navigator.geolocation.watchPosition(successHandlerGeoLocation.bind(this), onErrorGeoLocation,{enableHighAccuracy: true, timeout:30000});
+    startButton = document.getElementById("start-button");
+    startButton.removeEventListener("click",startTracking);
+    startButton.addEventListener("click",stopTracking);
+}
 
 app.initialize();

@@ -1,5 +1,5 @@
 #Internal package file, do not edit.
-#Sun Nov 18 17:10:21 CET 2018
+#Sun Nov 18 18:04:52 CET 2018
 4.path=www/cordova-js-src/android/nativeapiprovider.js
 13.baseType=DIRECTORY
 8.set=ASSET

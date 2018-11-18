@@ -37,20 +37,27 @@
     </head>
     <body>
         <div class="app">
+            <div><button id="start-button">Start</button></div>
             <div id="newStepData" class="blink">
-                <p class="event stepUpdate" style="color:black">No Step Count</p>
+                Steps:<p class="event stepUpdate" style="color:black">No Step Count</p>
+            </div>
+            <div id="newDistance">
+                Distance:<p class="event distanceUpdate" style="color:black">Distance</p>
             </div>
             <!--div id="newGeoLocation" class="blink">
                 <p class="event geoLocationUpdate" style="color:black">geoData</p>
             </div-->
-            <div id="newDistance">
-                <p class="event distanceUpdate" style="color:black">Distance</p>
+            <div id="newTrainingStepData" class="blink">
+                Steps Training:<p class="event stepTrainingUpdate" style="color:black">No Step Count</p>
+            </div>
+            <div id="newTrainingDistance">
+                Distance Training:<p class="event trainingDistanceUpdate" style="color:black">Distance</p>
             </div>
             <div id="newAverageSpeed">
-                <p class="event averageSpeedUpdate" style="color:black">AverageSpeed</p>
+                AverageSpeed Training:<p class="event averageSpeedUpdate" style="color:black">AverageSpeed</p>
             </div>
             <div id="newCurrentSpeed">
-                <p class="event currentSpeedUpdate" style="color:black">CurrentSpeed</p>
+                CurrentSpeed Training:<p class="event currentSpeedUpdate" style="color:black">CurrentSpeed</p>
             </div>
         </div>
         <script type="text/javascript" src="cordova.js"></script>
