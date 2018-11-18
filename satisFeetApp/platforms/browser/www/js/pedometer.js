@@ -3,7 +3,7 @@
 *Mike Amacker
 */
 //document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
-var onError = function(){
+/*var onError = function(){
     console.log("pedometerUpdates error");
 }
 var successHandler = function (pedometerData) {
@@ -14,4 +14,4 @@ var successHandler = function (pedometerData) {
     // pedometerData.floorsAscended;
     // pedometerData.floorsDescended;
 };
-pedometer.startPedometerUpdates(successHandler, onError);
+pedometer.startPedometerUpdates(successHandler, onError);*/

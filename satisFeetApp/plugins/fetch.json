@@ -7,10 +7,18 @@
     "is_top_level": true,
     "variables": {}
   },
-  "cordova-plugin-pedometer": {
+  "cordova-plugin-geolocation": {
     "source": {
       "type": "registry",
-      "id": "cordova-plugin-pedometer"
+      "id": "cordova-plugin-geolocation@4.0.1"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-pedometer": {
+    "source": {
+      "type": "registry",
+      "id": "https://github.com/emesonsantana/cordova-pedometer.git"
     },
     "is_top_level": true,
     "variables": {}

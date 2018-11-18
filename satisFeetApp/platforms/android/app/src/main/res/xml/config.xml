@@ -4,8 +4,11 @@
         <param name="android-package" value="org.apache.cordova.whitelist.WhitelistPlugin" />
         <param name="onload" value="true" />
     </feature>
+    <feature name="Geolocation">
+        <param name="android-package" value="org.apache.cordova.geolocation.Geolocation" />
+    </feature>
     <feature name="Pedometer">
-        <param name="android-package" value="org.apache.cordova.pedometer.PedoListener" />
+        <param name="android-package" value="com.emesonsantana.cordova.pedometer.PedometerListener" />
     </feature>
     <name>HelloCordova</name>
     <description>

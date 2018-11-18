@@ -10,7 +10,10 @@
     "cordova-plugin-whitelist": {
       "PACKAGE_NAME": "io.cordova.hellocordova"
     },
-    "cordova-plugin-pedometer": {
+    "cordova-plugin-geolocation": {
+      "PACKAGE_NAME": "io.cordova.hellocordova"
+    },
+    "cordova-pedometer": {
       "PACKAGE_NAME": "io.cordova.hellocordova"
     }
   },

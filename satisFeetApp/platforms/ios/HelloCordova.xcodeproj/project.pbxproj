@@ -16,8 +16,10 @@
 		3047A5131AB8059700498E2A /* build-release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 3047A5101AB8059700498E2A /* build-release.xcconfig */; };
 		3047A5141AB8059700498E2A /* build.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 3047A5111AB8059700498E2A /* build.xcconfig */; };
 		6AFF5BF91D6E424B00AB3073 /* CDVLaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6AFF5BF81D6E424B00AB3073 /* CDVLaunchScreen.storyboard */; };
-		028CD1B96AAC4581B3753803 /* Pedometer.m in Sources */ = {isa = PBXBuildFile; fileRef = 41A4E7DE06F24FF8B3EE726E /* Pedometer.m */; };
-		E1B5A77EAB50402CADBEBD02 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 121EE2114E6F440ABED393B4 /* CoreMotion.framework */; };
+		38780D1BFD274985814A2E42 /* CDVLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = A8200EC4EFA64B56B7CCCE9C /* CDVLocation.m */; };
+		76B038F8A5B947BEAEC9056D /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF1D77FF332D4633864C1EDF /* CoreLocation.framework */; };
+		9D6855B0FAC643FEB23B89D3 /* Pedometer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C29BEB6F4E147BC9AF59421 /* Pedometer.m */; };
+		6D439D61144F487CA19706EB /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A97FC3DE203C4FC2BB8C93B7 /* CoreMotion.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,9 +60,12 @@
 		EB87FDF41871DAF40020F90C /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = config.xml; path = ../../config.xml; sourceTree = "<group>"; };
 		F840E1F0165FE0F500CFE078 /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = config.xml; path = "HelloCordova/config.xml"; sourceTree = "<group>"; };
 		ED33DF2A687741AEAF9F8254 /* Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Bridging-Header.h"; path = "Bridging-Header.h"; sourceTree = "<group>"; };
-		41A4E7DE06F24FF8B3EE726E /* Pedometer.m */ = {isa = PBXFileReference; name = "Pedometer.m"; path = "cordova-plugin-pedometer/Pedometer.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
-		FAB6027935C44DA8BAD7A3EF /* Pedometer.h */ = {isa = PBXFileReference; name = "Pedometer.h"; path = "cordova-plugin-pedometer/Pedometer.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
-		121EE2114E6F440ABED393B4 /* CoreMotion.framework */ = {isa = PBXFileReference; name = "CoreMotion.framework"; path = "System/Library/Frameworks/CoreMotion.framework"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
+		A8200EC4EFA64B56B7CCCE9C /* CDVLocation.m */ = {isa = PBXFileReference; name = "CDVLocation.m"; path = "cordova-plugin-geolocation/CDVLocation.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
+		A0E33B57B7CF4C64B2EB6669 /* CDVLocation.h */ = {isa = PBXFileReference; name = "CDVLocation.h"; path = "cordova-plugin-geolocation/CDVLocation.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		AF1D77FF332D4633864C1EDF /* CoreLocation.framework */ = {isa = PBXFileReference; name = "CoreLocation.framework"; path = "System/Library/Frameworks/CoreLocation.framework"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
+		2C29BEB6F4E147BC9AF59421 /* Pedometer.m */ = {isa = PBXFileReference; name = "Pedometer.m"; path = "cordova-pedometer/Pedometer.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
+		C6563C88E99C4DC88D5AFA03 /* Pedometer.h */ = {isa = PBXFileReference; name = "Pedometer.h"; path = "cordova-pedometer/Pedometer.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		A97FC3DE203C4FC2BB8C93B7 /* CoreMotion.framework */ = {isa = PBXFileReference; name = "CoreMotion.framework"; path = "System/Library/Frameworks/CoreMotion.framework"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,7 +74,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				301BF552109A68D80062928A /* libCordova.a in Frameworks */,
-				E1B5A77EAB50402CADBEBD02 /* CoreMotion.framework in Frameworks */,
+				76B038F8A5B947BEAEC9056D /* CoreLocation.framework in Frameworks */,
+				6D439D61144F487CA19706EB /* CoreMotion.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -140,7 +146,8 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				121EE2114E6F440ABED393B4 /* CoreMotion.framework */,
+				AF1D77FF332D4633864C1EDF /* CoreLocation.framework */,
+				A97FC3DE203C4FC2BB8C93B7 /* CoreMotion.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -166,8 +173,10 @@
 		307C750510C5A3420062BCA9 /* Plugins */ = {
 			isa = PBXGroup;
 			children = (
-				41A4E7DE06F24FF8B3EE726E /* Pedometer.m */,
-				FAB6027935C44DA8BAD7A3EF /* Pedometer.h */,
+				A8200EC4EFA64B56B7CCCE9C /* CDVLocation.m */,
+				A0E33B57B7CF4C64B2EB6669 /* CDVLocation.h */,
+				2C29BEB6F4E147BC9AF59421 /* Pedometer.m */,
+				C6563C88E99C4DC88D5AFA03 /* Pedometer.h */,
 			);
 			name = Plugins;
 			path = "HelloCordova/Plugins";
@@ -280,7 +289,8 @@
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				1D3623260D0F684500981E51 /* AppDelegate.m in Sources */,
 				302D95F114D2391D003F00A1 /* MainViewController.m in Sources */,
-				028CD1B96AAC4581B3753803 /* Pedometer.m in Sources */,
+				38780D1BFD274985814A2E42 /* CDVLocation.m in Sources */,
+				9D6855B0FAC643FEB23B89D3 /* Pedometer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
