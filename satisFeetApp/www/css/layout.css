@@ -19,7 +19,8 @@ h1, h2, h3, h4, h5, h6, p {
 	border: 0;
 	font-size: 100%;
 	font: inherit;
-	vertical-align: baseline;
+    vertical-align: baseline;
+    font-weight: normal;
 }
 
 body {
@@ -56,19 +57,19 @@ h1 {
     letter-spacing: 0.05em;
 }
 
+#feedback {
+    width: 90%;
+    margin: 30px auto;
+}
+
 #feedback h2 {
-    font-size: 30pt;
+    font-size: 20pt;
     color: #707070;
 }
 
 #feedback p {
     font-size: 14pt;
     color: #707070;
-}
-
-#feedback {
-    width: 90%;
-    margin: 10px auto;
 }
 
 .counter, .run {
@@ -85,12 +86,38 @@ h1 {
 .run {
     background-color: #D2323A;
     border: 3px solid #D2323A;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.run p {
+    line-height: 95px;
+    padding-left: 10px;
+    color: white;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 13pt; 
+}
+
+#start-stop {
+    width: 65px;
+    height: 65px;
+    border: 2px solid white;
+    border-radius: 35px;
+    margin-top: 10px;
+    margin-right: 10px;
+}
+
+#start-stop img {
+    width: 55px;
+    transform: translateY(-9px);
+    padding-left: 7px;
 }
 
 .info {
     background-color: #F5F5F5;
     font-size: 14pt;
-    padding: 10px 0px 10px 0px;
+    padding: 20px 0px 20px 0px;
 }
 
 .info > div {
@@ -100,7 +127,6 @@ h1 {
 
 h4 {
     font-family: Akko Medium;
-    font-weight: normal;
 }
 
 .info p {
@@ -142,3 +168,4 @@ h4 {
 .menuItem:hover .disabled
 {
     display: inline-block;
+}
