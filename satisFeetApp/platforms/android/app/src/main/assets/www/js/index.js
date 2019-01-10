@@ -84,7 +84,7 @@ var onErrorPedometer = function(error){
 }
 
 var successHandlerGeoLocation = function(position) {
-    console.log(position.coords.accuracy);
+    if(isDebugging){console.log(position.coords.accuracy)};
     //The user has to do at least 50 steps in a minute, if he won't move we don't need the geoLocation
     if(Date.now()-stepCountInOneMinuteTimer<60000 &&
         (stepCountInLastMinuteGreaterThanFifty || stepCountInOneMinute > 50)&&
