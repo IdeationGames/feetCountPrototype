@@ -16,131 +16,24 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-var isDebugging = true;     //change this to cancel all the consolelogs except for errors
+let permanentStorage = window.localStorage;
+let isDebugging = true;     //change this to cancel all the consolelogs except for errors
 //var lastGeoUpdateTime = 0;
-var counterGeoUpdates = 0;
-var lastGeoLocation ={lon:0,lat:0};
-var traveledDistance = 0; //it initialises with 5m on the count allready
-var stepCount = 0;
-var stepCountInOneMinute = 0;
-var stepCountAtTheStartOfTheMinute = 0;
-var stepCountInOneMinuteTimer = Date.now();
-var stepCountInLastMinuteGreaterThanFifty = false;
-var calculateViaSteps = true;
-var accuracyThreshold = 8;
-var appStartTime;
-var watchId;
-var trainingStepCountAtTheStart = 0;
-var trainingStartDistance = 0;
-var isTrainingStarted = false;
+let traveledDistance = 0; //it initialises with 5m on the count allready
+let stepCount = 0;
+let stepCountInOneMinute = 0;
+let stepCountAtTheStartOfTheMinute = 0;
+let stepCountInOneMinuteTimer = Date.now();
+let stepCountInLastMinuteGreaterThanFifty = false;
+let calculateViaSteps = true;
+let appStartTime;
+let watchId;
+let trainingStepCountAtTheStart = 0;
+let trainingStartDistance = 0;
+let isTrainingStarted = false;
 
-var successStopPedo = function(){
-    console.log("stoped Pedometer");
-}
-var failurStopPedo = function(){
-    console.log("couldn't stop Pedometer");
-}
-//traveled distance sollte auch hier angezeigt werden
-var successHandlerPedometer = function (pedometerData) {
-    console.log("Pedometer Success");
-        if(calculateViaSteps){
-            var distance = 0;
-            distance = (pedometerData.numberOfSteps-stepCount)*0.77;
-            traveledDistance += distance;
-            if(isTrainingStarted){
-                trainingStartDistance = trainingStartDistance>0?trainingStartDistance:traveledDistance;
-                let trainingDistance = traveledDistance - trainingStartDistance;
-                this.receivedEvent('newAverageSpeed',(trainingDistance/((Date.now()-appStartTime)/1000))*3600/1000);
-                this.receivedEvent('newTrainingDistance',trainingDistance);
-            }
-            this.receivedEvent('newDistance',traveledDistance);
-        }
-        stepCount = pedometerData.numberOfSteps;
-        stepCountInOneMinute = stepCount - stepCountAtTheStartOfTheMinute;
-        let timestamp = Date.now();
-        if(timestamp-stepCountInOneMinuteTimer>60000){
-            stepCountInLastMinuteGreaterThanFifty=stepCountInOneMinute>50?true:false;
-            stepCountInOneMinuteTimer = timestamp;
-            stepCountInOneMinute = 0;
-            stepCountAtTheStartOfTheMinute = stepCount;
-        }
-        this.receivedEvent('newStepData',stepCount);
-        if(isTrainingStarted){
-            trainingStepCountAtTheStart = (trainingStepCountAtTheStart>0)?trainingStepCountAtTheStart:pedometerData.numberOfSteps;
-            this.receivedEvent('newTrainingStepData',(stepCount - trainingStepCountAtTheStart));
-        }
-        /*if(Date.now()-lastGeoUpdateTime >10000 && lastGeoUpdateTime != 0){
-            lastGeoUpdateTime = 0;
-            navigator.geolocation.getCurrentPosition(successHandlerGeoLocation.bind(this), onErrorGeoLocation,{enableHighAccuracy: true});
-        }*/
-        // pedometerData.startDate; -> ms since 1970
-        // pedometerData.endDate; -> ms since 1970
-        //pedometerData.distance;
-        // pedometerData.floorsAscended;counterGeoUpdates++;
-        // pedometerData.floorsDescended;
-};
-
-var onErrorPedometer = function(error){
-    console.log("PdeometerError: "+error);
-}
-
-var successHandlerGeoLocation = function(position) {
-    if(isDebugging){console.log(position.coords.accuracy)};
-    //The user has to do at least 50 steps in a minute, if he won't move we don't need the geoLocation
-    if(Date.now()-stepCountInOneMinuteTimer<60000 &&
-        (stepCountInLastMinuteGreaterThanFifty || stepCountInOneMinute > 50)&&
-        position.coords.accuracy<accuracyThreshold)
-    {
-        calculateViaSteps = false;
-        if(counterGeoUpdates == 0 && isDebugging){alert("now using GPS")};
-        counterGeoUpdates++;
-        var distanceSinceLastCall = 0;
-        if(counterGeoUpdates%5==0){
-            distanceSinceLastCall = getDistanceFromLatLonInM(lastGeoLocation.lat,
-                lastGeoLocation.lon,
-                position.coords.latitude,
-                position.coords.longitude);
-            traveledDistance += distanceSinceLastCall>42?0:distanceSinceLastCall;
-        }
-        this.receivedEvent('newDistance',traveledDistance);
-        if(isTrainingStarted){
-            trainingStartDistance = trainingStartDistance>0?trainingStartDistance:traveledDistance;
-            let trainingDistance = traveledDistance - trainingStartDistance;
-            this.receivedEvent('newAverageSpeed',(trainingDistance/((Date.now()-appStartTime)/1000))*3600/1000);
-            this.receivedEvent('newTrainingDistance',trainingDistance);
-            this.receivedEvent('newCurrentSpeed',position.coords.speed);
-        }
-        /*this.receivedEvent('newGeoLocation',
-              //'Latitude: '          + position.coords.latitude          + '\n' +
-              //'Longitude: '         + position.coords.longitude         + '\n' +
-              //'Distance: '            + distanceSinceLastCall             + '\n' +
-              //'TraveledDistance: '    + traveledDistance                 + '\n' +
-              'Altitude: '          + position.coords.altitude          + '\n' +
-              'Accuracy: '          + position.coords.accuracy          + '\n' +
-              //'Altitude Accuracy: ' + position.coords.altitudeAccuracy  + '\n' +
-              //'Heading: '           + position.coords.heading           + '\n' +
-              //'Speed: '             + position.coords.speed             + '\n' +//meter per second
-              //'Timestamp: '         + position.timestamp                + '\n' +
-              //'TimeBetweenUpdates: '+ (position.timestamp-lastGeoUpdateTime)               + '\n' +
-              //'counter updates: '   +  counterGeoUpdates                + '\n');*/
-        //lastGeoUpdateTime = position.timestamp;
-        if(distanceSinceLastCall > 0){
-            lastGeoLocation.lon = position.coords.longitude;
-            lastGeoLocation.lat = position.coords.latitude;
-        }
-        if(isDebugging){console.log(position.timestamp+" "+counterGeoUpdates)};
-    }else{
-        calculateViaSteps = true;
-    }
-};
-
-// onError Callback receives a PositionError object
-function onErrorGeoLocation(error) {
-    console.log('code: '    + error.code    + '\n' +
-          'message: ' + error.message + '\n');
-}
-
-var app = {
+//bodyA.insertAdjacentHTML('beforeend', '<span>testitest tets</span>');
+let app = {
     // Application Consftructor
     initialize: function() {
         document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
@@ -159,33 +52,36 @@ var app = {
     receivedEvent: function(id,data) {
         var parentElement = document.getElementById(id);
         var updateElement;
-        switch(id){
-            case "newStepData":
-                updateElement = parentElement.querySelector('.stepUpdate');
-            break;
-            case "newTrainingStepData":
-                updateElement = parentElement.querySelector('.stepTrainingUpdate');
-            break;
-            /*case "newGeoLocation":
-                updateElement = parentElement.querySelector('.geoLocationUpdate');*/
-            break;
-            case "newTrainingDistance":
-                updateElement = parentElement.querySelector('.trainingDistanceUpdate');
-            break;
-            case "newDistance":
-                updateElement = parentElement.querySelector('.distanceUpdate');
-            break;
-            case "newAverageSpeed":
-                updateElement = parentElement.querySelector('.averageSpeedUpdate');
-            break;
-            case "newCurrentSpeed":
-                updateElement = parentElement.querySelector('.currentSpeedUpdate');
-            break;
+        if(parentElement !== null){
+            switch(id){
+                case "newStepData":
+                    updateElement = parentElement.querySelector('.stepUpdate');
+                break;
+                case "newTrainingStepData":
+                    updateElement = parentElement.querySelector('.stepTrainingUpdate');
+                break;
+                /*case "newGeoLocation":
+                    updateElement = parentElement.querySelector('.geoLocationUpdate');*/
+                break;
+                case "newTrainingDistance":
+                    updateElement = parentElement.querySelector('.trainingDistanceUpdate');
+                break;
+                case "newDistance":
+                    updateElement = parentElement.querySelector('.distanceUpdate');
+                break;
+                case "newAverageSpeed":
+                    updateElement = parentElement.querySelector('.averageSpeedUpdate');
+                break;
+                case "newCurrentSpeed":
+                    updateElement = parentElement.querySelector('.currentSpeedUpdate');
+                break;
+            }
+            updateElement.innerHTML = data;
         }
-        updateElement.innerHTML = data;
         if(isDebugging){console.log('Received Event: ' + id)};
     }
 };
+permanentStorage.setItem("app",app);
 
 function stopTracking(){
     isTrainingStarted = false;
@@ -206,6 +102,22 @@ function startTracking(){
     startButton.removeEventListener("click",startTracking);
     startButton.addEventListener("click",stopTracking);
     startButton.innerHTML = "Stop";
+}
+
+function changeView(file){
+    body = document.getElementById("all");
+    while (body.firstChild) {
+        body.removeChild(body.firstChild);
+    }
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            body.innerHTML =
+            this.responseText;
+        }
+  };
+  xhttp.open("GET", file+".html", true);
+  xhttp.send();
 }
 
 app.initialize();
