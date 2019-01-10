@@ -50,10 +50,10 @@ let app = {
 
     // Update DOM on a Received Event
     receivedEvent: function(id,data) {
-        var parentElement = document.getElementById(id);
-        var updateElement;
-        if(parentElement !== null){
-            switch(id){
+        var updateElement = document.getElementById(id);
+        //var updateElement;
+        if(updateElement !== null){
+            /*switch(id){
                 case "newStepData":
                     updateElement = parentElement.querySelector('.stepUpdate');
                 break;
@@ -62,7 +62,7 @@ let app = {
                 break;
                 /*case "newGeoLocation":
                     updateElement = parentElement.querySelector('.geoLocationUpdate');*/
-                break;
+                /*break;
                 case "newTrainingDistance":
                     updateElement = parentElement.querySelector('.trainingDistanceUpdate');
                 break;
@@ -75,7 +75,7 @@ let app = {
                 case "newCurrentSpeed":
                     updateElement = parentElement.querySelector('.currentSpeedUpdate');
                 break;
-            }
+            }*/
             updateElement.innerHTML = data;
         }
         if(isDebugging){console.log('Received Event: ' + id)};

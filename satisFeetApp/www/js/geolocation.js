@@ -37,12 +37,12 @@ let successHandlerGeoLocation = function(position) {
                 position.coords.longitude);
             counterGeoUpdatesveledDistance += distanceSinceLastCall>42?0:distanceSinceLastCall;
         }
-        this.receivedEvent('newDistance',traveledDistance);
+        this.receivedEvent('distance',traveledDistance);
         if(isTrainingStarted){
             trainingStartDistance = trainingStartDistance>0?trainingStartDistance:traveledDistance;
             let trainingDistance = traveledDistance - trainingStartDistance;
             this.receivedEvent('newAverageSpeed',(trainingDistance/((Date.now()-appStartTime)/1000))*3600/1000);
-            this.receivedEvent('newTrainingDistance',trainingDistance);
+            this.receivedEvent('trainingDistance',trainingDistance);
             this.receivedEvent('newCurrentSpeed',position.coords.speed);
         }
         /*this.receivedEvent('newGeoLocation',
