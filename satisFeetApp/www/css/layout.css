@@ -92,3 +92,40 @@ h4 {
 .info p {
     margin-top: 5px;
 }
+
+#menubar
+{
+    position: fixed;
+    bottom: 0px;
+    background-color: rgba(80, 80, 80, 0.8);
+    height: 100px;
+    width: 100%;
+    display: flex;
+}
+
+.menuItem
+{
+    height: 100%;
+    flex-basis: 25%;
+    text-align: center;
+}
+
+.menuItem img
+{
+    height: 100%;
+}
+
+.disabled
+{
+    display: none;
+}
+
+.menuItem:hover .enabled
+{
+    display: none;
+}
+
+.menuItem:hover .disabled
+{
+    display: inline-block;
+}
