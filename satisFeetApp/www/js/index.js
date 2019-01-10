@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-var isDebugging = false;     //change this to cancel all the consolelogs except for errors
+var isDebugging = true;     //change this to cancel all the consolelogs except for errors
 //var lastGeoUpdateTime = 0;
 var counterGeoUpdates = 0;
 var lastGeoLocation ={lon:0,lat:0};
@@ -40,8 +40,9 @@ var successStopPedo = function(){
 var failurStopPedo = function(){
     console.log("couldn't stop Pedometer");
 }
-//traveled distance sollte auch hier angezeigt werden 
+//traveled distance sollte auch hier angezeigt werden
 var successHandlerPedometer = function (pedometerData) {
+    console.log("Pedometer Success");
         if(calculateViaSteps){
             var distance = 0;
             distance = (pedometerData.numberOfSteps-stepCount)*0.77;
@@ -64,6 +65,7 @@ var successHandlerPedometer = function (pedometerData) {
             stepCountAtTheStartOfTheMinute = stepCount;
         }
         this.receivedEvent('newStepData',stepCount);
+        console.log(stepCount);
         if(isTrainingStarted){
             trainingStepCountAtTheStart = (trainingStepCountAtTheStart>0)?trainingStepCountAtTheStart:pedometerData.numberOfSteps;
             this.receivedEvent('newTrainingStepData',(stepCount - trainingStepCountAtTheStart));
@@ -80,7 +82,7 @@ var successHandlerPedometer = function (pedometerData) {
 };
 
 var onErrorPedometer = function(error){
-    console.log(error);
+    console.log("PdeometerError: "+error);
 }
 
 var successHandlerGeoLocation = function(position) {
@@ -142,7 +144,6 @@ function onErrorGeoLocation(error) {
 var app = {
     // Application Consftructor
     initialize: function() {
-        document.getElementById("start-button").addEventListener("click",startTracking.bind(this));
         document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
     },
 
@@ -152,6 +153,7 @@ var app = {
     // 'pause', 'resume', etc.
     onDeviceReady: function() {
         pedometer.startPedometerUpdates(successHandlerPedometer.bind(this), onErrorPedometer);
+        document.getElementById("start-button").addEventListener("click",startTracking.bind(this));
     },
 
     // Update DOM on a Received Event
@@ -194,6 +196,7 @@ function stopTracking(){
     //pedometer.stopPedometerUpdates(successStopPedo, failurStopPedo);
     startButton.removeEventListener("click",stopTracking);
     startButton.addEventListener("click",startTracking);
+    startButton.innerHTML = "Start";
 }
 
 function startTracking(){
@@ -203,6 +206,7 @@ function startTracking(){
     startButton = document.getElementById("start-button");
     startButton.removeEventListener("click",startTracking);
     startButton.addEventListener("click",stopTracking);
+    startButton.innerHTML = "Stop";
 }
 
 app.initialize();
