@@ -1,28 +1,94 @@
+/*FONT*/
 @font-face {
     font-family: Akko Regular;
     src: url(../assets/font/AkkoStd-Regular.woff);
   }
-
-  @font-face {
+@font-face {
     font-family: Akko Medium;
     src: url(../assets/font/AkkoStd-Medium.woff);
   }
-
-
-
-  #header {
-      height: 20%;
-  }
-
-  .left {
- height: 50%;
-  }
-
-  .right {
-height: 50%;
+@font-face {
+    font-family: Akko Light;
+    src: url(../assets/font/AkkoStd-Light.woff);
   }
 
 
-  p {
-      font-family: Akko Regular;
-  }
+body {
+    margin: 0;
+    font-family: Akko Light;
+}
+
+.header {
+    height: 20%;
+    display: flex;
+    color: white;
+}
+
+
+.left {
+    background-color: #255E39;
+    width: 50%;
+}
+
+.right {
+    background-color: #46A13F;
+    width: 50%;
+}
+
+h1 {
+    font-size: 30px;
+    margin: 20px 0px 0px 10px;
+}
+
+.header p {
+    font-size: 14px;
+    margin: 0px 10px 20px 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+#feedback p {
+    font-size: 14pt;
+}
+
+#feedback {
+    width: 90%;
+    margin: 10px auto;
+}
+
+.counter, .run {
+    height: 90px;
+    width: 90%;
+    margin: 30px auto;
+    border-radius: 10px;
+}
+
+.counter {
+    border: 3px solid #255E39;
+}
+
+.run {
+    background-color: #D2323A;
+    border: 3px solid #D2323A;
+}
+
+.info {
+    background-color: #F5F5F5;
+    font-size: 14pt;
+    padding: 10px 0px 10px 0px;
+}
+
+.info > div {
+    width: 90%;
+    margin: auto;
+}
+
+h4 {
+    margin-bottom: 0;
+    font-family: Akko Medium;
+    font-weight: normal;
+}
+
+.info p {
+    margin-top: 5px;
+}
