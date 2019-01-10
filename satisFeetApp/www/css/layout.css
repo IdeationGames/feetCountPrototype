@@ -108,11 +108,12 @@ h1 {
     text-transform: uppercase;
     padding-top: 26.8px;
     color: #46A13F;
+    text-align: right;
 }
 
 #accomplished {
     background-color: #255E39;
-    width: 50%;
+    width: 70%;
     height: 14px;
 }
 
@@ -121,7 +122,6 @@ h1 {
     border: 3px solid #255E39;
     
     /* Zweite Seite Box 1*/
-    /*display: none;*/
     display: block;
 }
 
@@ -139,6 +139,18 @@ h1 {
 }
 /*-------*/
 
+.carousel .indicators .indicator-item.active
+{
+    background-color: #255E39;
+}
+
+.carousel .indicators .indicator-item
+{
+    background-color: #46A13F;
+}
+
+/*-------*/
+
 span {
     font-family: Akko Medium;
     text-transform: uppercase;
@@ -151,8 +163,7 @@ span {
     border: 3px solid #D2323A;
     justify-content: space-evenly;
 
-    /*display: flex;*/
-    display: none;
+    display: flex;
 }
 
 #run p {
@@ -234,6 +245,9 @@ span {
     justify-content: space-evenly;
     flex-direction: column;
 
+    /* Zweite Seite Box 2*/
+    display: none;
+    /*display: block;*/
 }
 
 #last-run > div {
