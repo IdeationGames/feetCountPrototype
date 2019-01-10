@@ -32,6 +32,30 @@ let trainingStepCountAtTheStart = 0;
 let trainingStartDistance = 0;
 let isTrainingStarted = false;
 
+function stopTracking(){
+    isTrainingStarted = false;
+    trainingStepCountAtTheStart = 0;
+    trainingStartDistance = 0;
+    navigator.geolocation.clearWatch(watchId);
+    //pedometer.stopPedometerUpdates(successStopPedo, failurStopPedo);
+    startButton = document.getElementById("run");
+    /*startButton.removeEventListener("click",stopTracking);
+    startButton.addEventListener("click",startTracking);*/
+    startButton.style.display ="flex";
+    document.getElementById("current-run").style.display = "none";
+}
+
+function startTracking(){
+    appStartTime = Date.now();
+    isTrainingStarted = true;
+    watchId = navigator.geolocation.watchPosition(successHandlerGeoLocation.bind(this), onErrorGeoLocation,{enableHighAccuracy: true, timeout:30000});
+    startButton = document.getElementById("run");
+    /*startButton.removeEventListener("click",startTracking);
+    startButton.addEventListener("click",stopTracking);*/
+    startButton.style.display ="none";
+    document.getElementById("current-run").style.display = "flex";
+}
+
 //bodyA.insertAdjacentHTML('beforeend', '<span>testitest tets</span>');
 let app = {
     // Application Consftructor
@@ -45,7 +69,8 @@ let app = {
     // 'pause', 'resume', etc.
     onDeviceReady: function() {
         pedometer.startPedometerUpdates(successHandlerPedometer.bind(this), onErrorPedometer);
-        document.getElementById("start-button").addEventListener("click",startTracking.bind(this));
+        document.getElementById("run").addEventListener("click",startTracking.bind(this));
+        document.getElementById("current-run").addEventListener("click",stopTracking.bind(this));
     },
 
     // Update DOM on a Received Event
@@ -82,27 +107,6 @@ let app = {
     }
 };
 permanentStorage.setItem("app",app);
-
-function stopTracking(){
-    isTrainingStarted = false;
-    trainingStepCountAtTheStart = 0;
-    trainingStartDistance = 0;
-    navigator.geolocation.clearWatch(watchId);
-    //pedometer.stopPedometerUpdates(successStopPedo, failurStopPedo);
-    startButton.removeEventListener("click",stopTracking);
-    startButton.addEventListener("click",startTracking);
-    startButton.innerHTML = "Start";
-}
-
-function startTracking(){
-    appStartTime = Date.now();
-    isTrainingStarted = true;
-    watchId = navigator.geolocation.watchPosition(successHandlerGeoLocation.bind(this), onErrorGeoLocation,{enableHighAccuracy: true, timeout:30000});
-    startButton = document.getElementById("start-button");
-    startButton.removeEventListener("click",startTracking);
-    startButton.addEventListener("click",stopTracking);
-    startButton.innerHTML = "Stop";
-}
 
 function changeView(file){
     body = document.getElementById("all");
