@@ -28,10 +28,17 @@ body {
     font-family: Akko Light;
 }
 
-.header {
+#header {
     height: 20%;
     display: flex;
     color: white;
+}
+
+#header p {
+    font-size: 14px;
+    margin: 0px 10px 20px 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
 
@@ -50,13 +57,6 @@ h1 {
     margin: 20px 0px 0px 10px;
 }
 
-.header p {
-    font-size: 14px;
-    margin: 0px 10px 20px 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
 #feedback {
     width: 90%;
     margin: 30px auto;
@@ -72,25 +72,90 @@ h1 {
     color: #707070;
 }
 
-.counter, .run {
+#counter-box, #run, #daily-overview, #current-run, #last-run {
     height: 90px;
     width: 90%;
     margin: 30px auto;
     border-radius: 10px;
 }
 
-.counter {
+#counter-box {
     border: 3px solid #255E39;
-}
-
-.run {
-    background-color: #D2323A;
-    border: 3px solid #D2323A;
     display: flex;
     justify-content: space-evenly;
+    align-items: center;
 }
 
-.run p {
+#counter h3 {
+    font-size: 25pt;
+    color: #255E39;
+}
+
+#counter p {
+    text-transform: uppercase;
+    font-size: 12pt;
+    color: #255E39;
+    font-family: Akko Medium;
+}
+
+#progress-bar {
+    width: 220px;
+    background-color: #46A13F;
+    height: 14px;
+    transform: translateY(+5px);
+}
+#progress p {
+    text-transform: uppercase;
+    padding-top: 26.8px;
+    color: #46A13F;
+}
+
+#accomplished {
+    background-color: #255E39;
+    width: 50%;
+    height: 14px;
+}
+
+/* ADDITIONAL SCREEN DAILY OVERVIEW */
+#daily-overview {
+    border: 3px solid #255E39;
+    
+    /* Zweite Seite Box 1*/
+    /*display: none;*/
+    display: block;
+}
+
+#daily-overview h3 {
+    text-transform: uppercase;
+    color: #255E39;
+    font-family: Akko Medium;
+    letter-spacing: 0.03em;
+    padding: 12px 0px 10px 15px;
+}
+
+#daily-overview p {
+    padding-left: 15px;
+    color: #707070;
+}
+/*-------*/
+
+span {
+    font-family: Akko Medium;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    font-size: 14px;
+}
+
+#run {
+    background-color: #D2323A;
+    border: 3px solid #D2323A;
+    justify-content: space-evenly;
+
+    /*display: flex;*/
+    display: none;
+}
+
+#run p {
     line-height: 95px;
     padding-left: 10px;
     color: white;
@@ -99,7 +164,7 @@ h1 {
     font-size: 13pt; 
 }
 
-#start-stop {
+.start-stop {
     width: 65px;
     height: 65px;
     border: 2px solid white;
@@ -108,11 +173,93 @@ h1 {
     margin-right: 10px;
 }
 
-#start-stop img {
+.start-stop img {
     width: 55px;
     transform: translateY(-9px);
     padding-left: 7px;
 }
+
+/* ADDITIONAL SCREEN CURRENT-RUN */
+#current-run {
+    background-color: #D2323A;
+    border: 3px solid #D2323A;    
+    justify-content: space-between;
+
+    /* Box wenn RUN ACTIVE */
+    display: none;
+    /*display: flex;*/
+}
+
+#current-run h3 {
+    color: white;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 13pt;
+    padding-bottom: 7px;
+}
+
+#current-run div:first-child p {
+    color: white;
+}
+
+#current-run div:first-child {
+    padding: 15px 0px 0px 20px;
+}
+
+#current-run .start-stop {
+    margin-right: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+#current-run .start-stop img {
+    transform: translateY(-16px);
+}
+
+#current-run div:nth-child(2) p {
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    font-size: 12pt;
+    font-family: Akko Medium;
+    color: white;
+    position: absolute;
+    padding: 42px 0px 0px 16px;
+}
+/*----*/
+
+
+/* ADDITIONAL SCREEN OVERVIEW RUN */
+#last-run {
+    border: 3px solid #46A13F;
+    justify-content: space-evenly;
+    flex-direction: column;
+
+}
+
+#last-run > div {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 15px 0px 15px;
+
+}
+
+#last-run h3 {
+    text-transform: uppercase;
+    color: #255E39;
+    font-family: Akko Medium;
+    letter-spacing: 0.03em;
+}
+
+#date { color: #46A13F; }
+
+#run-data { color: #707070; }
+
+#run-data > div:nth-child(2) {
+    transform: translateX(-60px);
+}
+
+/*----*/
+
 
 .info {
     background-color: #F5F5F5;
