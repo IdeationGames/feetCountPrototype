@@ -29,7 +29,7 @@
 
     <div id="counter-box">
         <div id="counter">
-            <h3>00000</h3>
+            <h3 id="stepCount">00000</h3>
             <p>Schritte</p>
         </div>
         <div id="progress">
@@ -41,13 +41,13 @@
 
                 </div>
             </div>
-            <p>Ziel: 10'000 Schritte</p>
+            <p>Ziel: <span id="goalStepCount">10'000</span> Schritte</p>
         </div>
     </div>
     <div id="daily-overview">
         <h3>Tagesübersicht</h3>
-        <p><span>Etagen:</span> 0 Stockwerke</p>
-        <p><span>Distanz:</span> 0.0 km</p>
+        <p><span>Etagen:</span> <span id="floorCount">0</span> Stockwerke</p>
+        <p><span>Distanz:</span> <span id="distance">0.0</span> km</p>
     </div>
 
     <div id="run">
@@ -59,8 +59,8 @@
     <div id="current-run">
         <div>
             <h3>Aktueller Lauf</h3>
-            <p><span>Zeit:</span> 00:08</p>
-            <p><span>Distanz:</span> 0.1 km</p>
+            <p><span>Zeit:</span> <span id="trainingTime">00:08</span></p>
+            <p><span>Distanz:</span> <span id="trainingDistance">0.1</span> km</p>
         </div>
         <div class="start-stop">
             <img src="assets/icons/stop_white.png">
