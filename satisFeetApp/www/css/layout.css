@@ -285,7 +285,7 @@ h4 {
     position: fixed;
     bottom: 0px;
     background-color: rgba(80, 80, 80, 0.8);
-    height: 100px;
+    height: 75px;
     width: 100%;
     display: flex;
 }
