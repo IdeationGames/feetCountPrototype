@@ -12,6 +12,15 @@
     src: url(../assets/font/AkkoStd-Light.woff);
   }
 
+  /* RESET TAGS */
+h1, h2, h3, h4, h5, h6, p {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
 
 body {
     margin: 0;
@@ -47,8 +56,14 @@ h1 {
     letter-spacing: 0.05em;
 }
 
+#feedback h2 {
+    font-size: 30pt;
+    color: #707070;
+}
+
 #feedback p {
     font-size: 14pt;
+    color: #707070;
 }
 
 #feedback {
@@ -84,7 +99,6 @@ h1 {
 }
 
 h4 {
-    margin-bottom: 0;
     font-family: Akko Medium;
     font-weight: normal;
 }
@@ -128,4 +142,3 @@ h4 {
 .menuItem:hover .disabled
 {
     display: inline-block;
-}
