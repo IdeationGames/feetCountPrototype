@@ -65,7 +65,6 @@ var successHandlerPedometer = function (pedometerData) {
             stepCountAtTheStartOfTheMinute = stepCount;
         }
         this.receivedEvent('newStepData',stepCount);
-        console.log(stepCount);
         if(isTrainingStarted){
             trainingStepCountAtTheStart = (trainingStepCountAtTheStart>0)?trainingStepCountAtTheStart:pedometerData.numberOfSteps;
             this.receivedEvent('newTrainingStepData',(stepCount - trainingStepCountAtTheStart));
@@ -93,7 +92,7 @@ var successHandlerGeoLocation = function(position) {
         position.coords.accuracy<accuracyThreshold)
     {
         calculateViaSteps = false;
-        if(counterGeoUpdates == 0){alert("now using GPS")};
+        if(counterGeoUpdates == 0 && isDebugging){alert("now using GPS")};
         counterGeoUpdates++;
         var distanceSinceLastCall = 0;
         if(counterGeoUpdates%5==0){
