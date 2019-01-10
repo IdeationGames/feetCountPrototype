@@ -1,0 +1,28 @@
+@font-face {
+    font-family: Akko Regular;
+    src: url(../assets/font/AkkoStd-Regular.woff);
+  }
+
+  @font-face {
+    font-family: Akko Medium;
+    src: url(../assets/font/AkkoStd-Medium.woff);
+  }
+
+
+
+  #header {
+      height: 20%;
+  }
+
+  .left {
+ height: 50%;
+  }
+
+  .right {
+height: 50%;
+  }
+
+
+  p {
+      font-family: Akko Regular;
+  }
