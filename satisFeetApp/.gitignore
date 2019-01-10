@@ -2,6 +2,7 @@
 .cordova
 merges
 platforms
+node_modules
 #config.xml
 bower.json
 gulpfile.js
