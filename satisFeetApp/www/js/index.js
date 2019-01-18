@@ -16,6 +16,12 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+/*
+
+NEXT STEP
+überprüfen das trainingsdistance und schritte mit der normalen distan übereinstimt
+
+ */
 let permanentStorage = window.localStorage;
 let isDebugging = true;     //change this to cancel all the consolelogs except for errors
 //var lastGeoUpdateTime = 0;
@@ -32,6 +38,7 @@ let appStartTime;
 let trainingStepCountAtTheStart = 0;
 let trainingStartDistance = 0;
 let watchId;
+let trackingTimer;
 
 function stopTracking(){
     console.log("stopTracking");
@@ -57,6 +64,10 @@ function startTracking(){
     startButton.addEventListener("click",stopTracking);*/
     startButton.style.display ="none";
     document.getElementById("current-run").style.display = "flex";
+    trackingTimer = setInterval(function(){
+        t = Date.now() - appStartTime;
+        document.getElementById("trainingTime").innerHTML = Math.round(t/1000);
+    },1000);
 }
 //bodyA.insertAdjacentHTML('beforeend', '<span>testitest tets</span>');
 let app = {

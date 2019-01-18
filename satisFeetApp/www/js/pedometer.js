@@ -33,9 +33,9 @@ let successHandlerPedometer = function (pedometerData) {
                 trainingStartDistance = trainingStartDistance>0?trainingStartDistance:traveledDistance;
                 let trainingDistance = traveledDistance - trainingStartDistance;
                 this.receivedEvent('newAverageSpeed',(trainingDistance/((Date.now()-appStartTime)/1000))*3600/1000);
-                this.receivedEvent('trainingDistance',trainingDistance);
+                this.receivedEvent('trainingDistance',Math.round(trainingDistance)/1000);
             }
-            this.receivedEvent('distance',traveledDistance);
+            this.receivedEvent('distance',Math.round(traveledDistance)/1000);
         }
         stepCount = pedometerData.numberOfSteps;
         stepCountInOneMinute = stepCount - stepCountAtTheStartOfTheMinute;
