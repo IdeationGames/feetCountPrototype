@@ -16,6 +16,12 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+/*
+
+NEXT STEP
+überprüfen das trainingsdistance und schritte mit der normalen distan übereinstimt
+
+ */
 let permanentStorage = window.localStorage;
 let isDebugging = true;     //change this to cancel all the consolelogs except for errors
 //var lastGeoUpdateTime = 0;
@@ -26,12 +32,43 @@ let stepCountAtTheStartOfTheMinute = 0;
 let stepCountInOneMinuteTimer = Date.now();
 let stepCountInLastMinuteGreaterThanFifty = false;
 let calculateViaSteps = true;
+let isTrainingStarted = false;
+let instance;
 let appStartTime;
-let watchId;
 let trainingStepCountAtTheStart = 0;
 let trainingStartDistance = 0;
-let isTrainingStarted = false;
+let watchId;
+let trackingTimer;
 
+function stopTracking(){
+    console.log("stopTracking");
+    isTrainingStarted = false;
+    trainingStepCountAtTheStart = 0;
+    trainingStartDistance = 0;
+    navigator.geolocation.clearWatch(watchId);
+    //pedometer.stopPedometerUpdates(successStopPedo, failurStopPedo);
+    startButton = document.getElementById("run");
+    /*startButton.removeEventListener("click",stopTracking);
+    startButton.addEventListener("click",startTracking);*/
+    startButton.style.display ="flex";
+    document.getElementById("current-run").style.display = "none";
+}
+
+function startTracking(){
+    console.log("startTracking");
+    appStartTime = Date.now();
+    isTrainingStarted = true;
+    watchId = navigator.geolocation.watchPosition(successHandlerGeoLocation.bind(this), onErrorGeoLocation,{enableHighAccuracy: true, timeout:30000});
+    startButton = document.getElementById("run");
+    /*startButton.removeEventListener("click",startTracking);
+    startButton.addEventListener("click",stopTracking);*/
+    startButton.style.display ="none";
+    document.getElementById("current-run").style.display = "flex";
+    trackingTimer = setInterval(function(){
+        t = Date.now() - appStartTime;
+        document.getElementById("trainingTime").innerHTML = Math.round(t/1000);
+    },1000);
+}
 //bodyA.insertAdjacentHTML('beforeend', '<span>testitest tets</span>');
 let app = {
     // Application Consftructor
@@ -45,7 +82,6 @@ let app = {
     // 'pause', 'resume', etc.
     onDeviceReady: function() {
         pedometer.startPedometerUpdates(successHandlerPedometer.bind(this), onErrorPedometer);
-        document.getElementById("start-button").addEventListener("click",startTracking.bind(this));
     },
 
     // Update DOM on a Received Event
@@ -83,27 +119,6 @@ let app = {
 };
 permanentStorage.setItem("app",app);
 
-function stopTracking(){
-    isTrainingStarted = false;
-    trainingStepCountAtTheStart = 0;
-    trainingStartDistance = 0;
-    navigator.geolocation.clearWatch(watchId);
-    //pedometer.stopPedometerUpdates(successStopPedo, failurStopPedo);
-    startButton.removeEventListener("click",stopTracking);
-    startButton.addEventListener("click",startTracking);
-    startButton.innerHTML = "Start";
-}
-
-function startTracking(){
-    appStartTime = Date.now();
-    isTrainingStarted = true;
-    watchId = navigator.geolocation.watchPosition(successHandlerGeoLocation.bind(this), onErrorGeoLocation,{enableHighAccuracy: true, timeout:30000});
-    startButton = document.getElementById("start-button");
-    startButton.removeEventListener("click",startTracking);
-    startButton.addEventListener("click",stopTracking);
-    startButton.innerHTML = "Stop";
-}
-
 function changeView(file){
     body = document.getElementById("all");
     while (body.firstChild) {
@@ -114,10 +129,21 @@ function changeView(file){
         if (this.readyState == 4 && this.status == 200) {
             body.innerHTML =
             this.responseText;
+            //load the homescreen scripts
+            if(file == "homescreenKopie"){
+                bodyAll = document.getElementById("all");
+                let s = document.createElement('script');
+                let s2 = document.createElement('script');
+                s.type = 'text/javascript';
+                s.src = "js/homescreen.js";
+                s2.type = s.type;
+                s2.src = "https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js";
+                bodyAll.appendChild(s);
+                bodyAll.appendChild(s2);
+            }
         }
   };
   xhttp.open("GET", file+".html", true);
   xhttp.send();
 }
-
 app.initialize();

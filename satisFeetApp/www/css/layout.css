@@ -139,6 +139,11 @@ h1 {
 }
 /*-------*/
 
+.carousel-slider
+{
+    /*height: 200px;*/
+}
+
 .carousel .indicators .indicator-item.active
 {
     background-color: #255E39;
@@ -195,9 +200,8 @@ span {
     background-color: #D2323A;
     border: 3px solid #D2323A;    
     justify-content: space-between;
-
+    height: 100px;
     /* Box wenn RUN ACTIVE */
-    display: none;
     /*display: flex;*/
 }
 
